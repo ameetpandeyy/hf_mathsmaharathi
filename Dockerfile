@@ -20,8 +20,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user for Hugging Face Spaces
-RUN useradd -m -u 1000 user
+# Create non-root user for Hugging Face Spaces and set up app directory ownership
+RUN useradd -m -u 1000 user && \
+    mkdir -p /home/user/app/data/ingested \
+             /home/user/app/data/blueprints \
+             /home/user/app/data/generated \
+             /home/user/app/exports && \
+    chown -R user:user /home/user
+
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH
 
@@ -37,9 +43,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 # Copy application source code
 COPY --chown=user:user . .
-
-# Ensure storage directories exist with write permissions
-RUN mkdir -p data/ingested data/blueprints data/generated exports
 
 # Hugging Face Spaces default port
 EXPOSE 7860
