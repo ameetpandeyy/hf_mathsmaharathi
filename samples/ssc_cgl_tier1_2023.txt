@@ -1,0 +1,44 @@
+Staff Selection Commission
+Combined Graduate Level Examination (Tier-I) 2023
+Subject: Quantitative Aptitude
+Time: 60 Minutes (Composite)
+
+Q.1) What is the value of: 25 * 4 + (120 / 6)? / 25 * 4 + (120 / 6) का मान क्या है?
+A) 120
+B) 100
+C) 140
+D) 110
+Ans: A
+Solution: 25 * 4 = 100, 120 / 6 = 20. 100 + 20 = 120.
+
+Q.2) An article is bought for ₹500 and sold at a profit of 20%. What is the selling price? / एक वस्तु ₹500 में खरीदी जाती है और 20% लाभ पर बेची जाती है। विक्रय मूल्य क्या है?
+A) ₹550
+B) ₹600
+C) ₹620
+D) ₹580
+Ans: B
+Solution: SP = 500 * (1 + 20/100) = 500 * 1.2 = ₹600.
+
+Q.3) Find the simple interest on ₹4000 at 5% per annum for 3 years. / ₹4000 पर 5% वार्षिक दर से 3 वर्ष का साधारण ब्याज कितना होगा?
+A) ₹500
+B) ₹700
+C) ₹600
+D) ₹650
+Ans: C
+Solution: SI = (4000 * 5 * 3) / 100 = 60000 / 100 = ₹600.
+
+Q.4) A can complete a work in 12 days and B in 24 days. How many days will they take working together? / A किसी कार्य को 12 दिनों में तथा B 24 दिनों में कर सकता है। दोनों मिलकर कितने दिन लेंगे?
+A) 6 days
+B) 8 days
+C) 10 days
+D) 9 days
+Ans: B
+Solution: 1/12 + 1/24 = 3/24 = 1/8. Total days = 8.
+
+Q.5) A train 150 meters long crosses a pole in 10 seconds. What is the speed of the train in km/h? / 150 मीटर लंबी ट्रेन एक खंभे को 10 सेकंड में पार करती है। ट्रेन की गति किमी/घंटा में क्या है?
+A) 54 km/h
+B) 60 km/h
+C) 45 km/h
+D) 72 km/h
+Ans: A
+Solution: Speed = 150/10 = 15 m/s. In km/h = 15 * 18/5 = 54 km/h.

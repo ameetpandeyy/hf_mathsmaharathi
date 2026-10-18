@@ -1,0 +1,43 @@
+Railway Recruitment Board
+Non-Technical Popular Categories (NTPC) Stage-I Examination 2022
+Subject: Mathematics
+
+Q.1) What is the value of: 144 / 12 + 15 * 3? / 144 / 12 + 15 * 3 का मान क्या है?
+A) 57
+B) 60
+C) 54
+D) 63
+Ans: A
+Solution: 144 / 12 = 12. 15 * 3 = 45. 12 + 45 = 57.
+
+Q.2) A train 200 meters long runs at 72 km/h. How long will it take to cross a 400-meter platform? / 200 मीटर लंबी ट्रेन 72 किमी/घंटा की रफ्तार से 400 मीटर लंबे प्लेटफॉर्म को कितने समय में पार करेगी?
+A) 30 seconds
+B) 25 seconds
+C) 20 seconds
+D) 35 seconds
+Ans: A
+Solution: Total distance = 200 + 400 = 600m. Speed = 72 * 5/18 = 20 m/s. Time = 600 / 20 = 30 seconds.
+
+Q.3) The perimeter of a rectangular field is 160 meters and its length is 50 meters. What is its breadth? / एक आयताकार मैदान का परिमाप 160 मीटर है और लंबाई 50 मीटर है। इसकी चौड़ाई क्या है?
+A) 30 meters
+B) 25 meters
+C) 35 meters
+D) 40 meters
+Ans: A
+Solution: Perimeter = 2*(L+B) => 160 = 2*(50+B) => 50+B = 80 => B = 30 meters.
+
+Q.4) What is the compound interest on ₹10000 at 10% per annum for 2 years compounded annually? / ₹10000 पर 10% वार्षिक दर से 2 वर्ष का चक्रवृद्धि ब्याज कितना होगा?
+A) ₹2100
+B) ₹2000
+C) ₹2200
+D) ₹1900
+Ans: A
+Solution: Amount = 10000 * (1.1)^2 = 12100. CI = 12100 - 10000 = ₹2100.
+
+Q.5) The mean of 10 numbers is 25. If each number is increased by 5, what is the new mean? / 10 संख्याओं का माध्य 25 है। यदि प्रत्येक संख्या में 5 की वृद्धि की जाए, तो नया माध्य क्या होगा?
+A) 30
+B) 25
+C) 35
+D) 20
+Ans: A
+Solution: When each observation is increased by a constant k, the new mean increases by k. 25 + 5 = 30.

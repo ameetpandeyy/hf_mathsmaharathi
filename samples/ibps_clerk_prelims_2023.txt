@@ -1,0 +1,43 @@
+Institute of Banking Personnel Selection
+Common Recruitment Process for Clerks 2023
+Subject: Numerical Ability
+
+Q.1) Simplify: 16 * 15 - 140 = ?
+A) 100
+B) 110
+C) 90
+D) 120
+Ans: A
+Solution: 16 * 15 = 240. 240 - 140 = 100.
+
+Q.2) What is 35% of 400?
+A) 120
+B) 140
+C) 150
+D) 130
+Ans: B
+Solution: (35/100) * 400 = 140.
+
+Q.3) A shopkeeper marks goods 40% above cost price of ₹500 and offers a 10% discount. What is the selling price?
+A) ₹630
+B) ₹650
+C) ₹600
+D) ₹620
+Ans: A
+Solution: Marked Price = 500 * 1.4 = 700. Selling Price = 700 * 0.9 = ₹630.
+
+Q.4) What will come in place of (?) in the series: 4, 9, 16, 25, ?
+A) 36
+B) 49
+C) 35
+D) 30
+Ans: A
+Solution: The series is squares of natural numbers: 2^2, 3^2, 4^2, 5^2, 6^2 = 36.
+
+Q.5) The ratio of milk and water in a 60-liter mixture is 2 : 1. How much water should be added to make the ratio 1 : 1?
+A) 20 liters
+B) 15 liters
+C) 10 liters
+D) 25 liters
+Ans: A
+Solution: Milk = 40L, Water = 20L. For 1:1, water must equal 40L. Added water = 40 - 20 = 20 liters.

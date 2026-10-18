@@ -1,0 +1,43 @@
+State Bank of India
+Probationary Officers Preliminary Examination 2023
+Subject: Quantitative Aptitude
+
+Q.1) What will come in place of question mark (?): 45% of 600 + 130 = ?
+A) 400
+B) 410
+C) 390
+D) 420
+Ans: A
+Solution: 45% of 600 = 270. 270 + 130 = 400.
+
+Q.2) Find the roots of the quadratic equation: x^2 - 7x + 12 = 0.
+A) 3, 4
+B) 2, 5
+C) -3, -4
+D) 1, 6
+Ans: A
+Solution: x^2 - 4x - 3x + 12 = 0 => (x-4)(x-3)=0 => roots are 3 and 4.
+
+Q.3) Divide ₹3500 between A and B in the ratio 4 : 3. What is A's share?
+A) ₹1500
+B) ₹2000
+C) ₹1800
+D) ₹2100
+Ans: B
+Solution: A's share = (4/7) * 3500 = 2000.
+
+Q.4) A man travels from town A to town B at 40 km/h and returns at 60 km/h. What is his average speed?
+A) 50 km/h
+B) 48 km/h
+C) 52 km/h
+D) 45 km/h
+Ans: B
+Solution: Average speed = 2xy/(x+y) = 2*40*60 / 100 = 48 km/h.
+
+Q.5) The average age of 5 boys is 16 years. If a new boy aged 22 joins, what is the new average age?
+A) 17 years
+B) 18 years
+C) 17.5 years
+D) 16.5 years
+Ans: A
+Solution: Total sum = 5 * 16 = 80. New sum = 80 + 22 = 102. New average = 102 / 6 = 17 years.

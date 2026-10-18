@@ -1,0 +1,43 @@
+Staff Selection Commission
+Combined Higher Secondary (10+2) Level Examination 2023
+Subject: Quantitative Aptitude
+
+Q.1) What is the value of: (18 * 4) / 8 + 25? / (18 * 4) / 8 + 25 का मान ज्ञात करें?
+A) 34
+B) 32
+C) 36
+D) 30
+Ans: A
+Solution: 18 * 4 = 72. 72 / 8 = 9. 9 + 25 = 34.
+
+Q.2) In a right-angled triangle, if base = 8 cm and height = 6 cm, what is the length of hypotenuse? / एक समकोण त्रिभुज में, यदि आधार = 8 सेमी और ऊंचाई = 6 सेमी है, तो कर्ण की लंबाई क्या होगी?
+A) 10 cm
+B) 12 cm
+C) 14 cm
+D) 9 cm
+Ans: A
+Solution: Hypotenuse = sqrt(8^2 + 6^2) = sqrt(64 + 36) = sqrt(100) = 10 cm.
+
+Q.3) If sin(θ) = 3/5, what is the value of cos(θ) for an acute angle θ? / यदि sin(θ) = 3/5 है, तो एक न्यून कोण θ के लिए cos(θ) का मान क्या होगा?
+A) 4/5
+B) 3/4
+C) 5/4
+D) 2/5
+Ans: A
+Solution: cos^2(θ) = 1 - sin^2(θ) = 1 - 9/25 = 16/25 => cos(θ) = 4/5.
+
+Q.4) A can finish a work in 15 days and B in 30 days. In how many days can they complete it together? / A किसी काम को 15 दिन में और B 30 दिन में पूरा कर सकता है। दोनों मिलकर इसे कितने दिनों में पूरा करेंगे?
+A) 10 days
+B) 12 days
+C) 15 days
+D) 8 days
+Ans: A
+Solution: (15 * 30) / (15 + 30) = 450 / 45 = 10 days.
+
+Q.5) The cost price of 20 articles is equal to the selling price of 16 articles. What is the profit percentage? / 20 वस्तुओं का क्रय मूल्य 16 वस्तुओं के विक्रय मूल्य के बराबर है। लाभ प्रतिशत क्या है?
+A) 25%
+B) 20%
+C) 30%
+D) 15%
+Ans: A
+Solution: 20 * CP = 16 * SP => SP/CP = 20/16 = 5/4. Profit% = ((5-4)/4) * 100 = 25%.

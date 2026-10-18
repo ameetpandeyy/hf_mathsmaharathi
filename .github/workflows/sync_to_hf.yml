@@ -1,0 +1,38 @@
+name: Sync to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Validate Secrets
+        run: |
+          if [ -z "${{ secrets.HF_TOKEN }}" ]; then
+            echo "::error::HF_TOKEN secret is missing. Add it to GitHub Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+          if [ -z "${{ secrets.HF_SPACE_REPO }}" ]; then
+            echo "::error::HF_SPACE_REPO secret is missing (e.g. 'username/maths-maharathi-pipeline')."
+            exit 1
+          fi
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_REPO: ${{ secrets.HF_SPACE_REPO }}
+        run: |
+          git config --global user.email "bot@mathsmaharathi.com"
+          git config --global user.name "Maths Maharathi Sync Bot"
+          git remote add space "https://USER:$HF_TOKEN@huggingface.co/spaces/$HF_SPACE_REPO"
+          git push --force space main:main
