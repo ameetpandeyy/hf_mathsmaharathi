@@ -8,6 +8,7 @@ class ExamType(str, Enum):
     SSC_CGL = "ssc_cgl"
     SSC_CHSL = "ssc_chsl"
     SBI_PO = "sbi_po"
+    SBI_CLERK = "sbi_clerk"
     IBPS_PO = "ibps_po"
     IBPS_CLERK = "ibps_clerk"
     RRB_NTPC = "rrb_ntpc"

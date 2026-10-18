@@ -33,6 +33,13 @@ EXAM_DEFAULTS = {
         "positive_mark_per_q": 1.0,
         "negative_mark_per_q": 0.25,
     },
+    ExamType.SBI_CLERK: {
+        "title": "SBI Clerk Prelims Numerical Ability",
+        "total_questions": 35,
+        "duration_minutes": 20,
+        "positive_mark_per_q": 1.0,
+        "negative_mark_per_q": 0.25,
+    },
     ExamType.IBPS_PO: {
         "title": "IBPS PO Prelims Quantitative Aptitude",
         "total_questions": 35,

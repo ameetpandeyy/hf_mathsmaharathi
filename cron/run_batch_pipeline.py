@@ -35,7 +35,7 @@ from pipeline.ingest.loader import PaperIngestor
 from pipeline.parse.bilingual_parser import BilingualPaperParser
 from pipeline.verify.solver import MathSolver
 from schemas.enums import ExamType, ReviewStatus, SourceType
-from schemas.models import Paper, Question
+from schemas.models import Blueprint, Paper, Question
 
 logging.basicConfig(
     level=logging.INFO,
@@ -53,8 +53,13 @@ def run_cron_job():
     logger.info("=================================================================")
 
     # Ensure required data folders exist
-    for directory in ["data/ingested", "data/blueprints", "data/generated", "exports", "logs"]:
-        Path(REPO_ROOT / directory).mkdir(parents=True, exist_ok=True)
+    blueprints_dir = REPO_ROOT / "data" / "blueprints"
+    generated_dir = REPO_ROOT / "data" / "generated"
+    exports_dir = REPO_ROOT / "exports"
+    logs_dir = REPO_ROOT / "logs"
+
+    for directory in [blueprints_dir, generated_dir, exports_dir, logs_dir]:
+        directory.mkdir(parents=True, exist_ok=True)
 
     summary = {
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -70,16 +75,27 @@ def run_cron_job():
     samples_dir = REPO_ROOT / "samples"
     if samples_dir.exists():
         for sample_file in samples_dir.glob("*.txt"):
-            exam_key = sample_file.stem.split("_")[0]
-            # Match to ExamType
-            exam_map = {
-                "ssc": ExamType.SSC_CGL,
-                "ibps": ExamType.IBPS_PO,
-                "sbi": ExamType.SBI_CLERK,
-                "rrb": ExamType.RRB_NTPC,
-            }
-            exam = exam_map.get(exam_key, ExamType.SSC_CGL)
-            bp_file = REPO_ROOT / "data" / "blueprints" / f"{exam.value}_blueprint.json"
+            stem = sample_file.stem.lower()
+            if "ssc_chsl" in stem:
+                exam = ExamType.SSC_CHSL
+            elif "ssc_cgl" in stem:
+                exam = ExamType.SSC_CGL
+            elif "sbi_po" in stem:
+                exam = ExamType.SBI_PO
+            elif "sbi_clerk" in stem:
+                exam = ExamType.SBI_CLERK
+            elif "ibps_clerk" in stem:
+                exam = ExamType.IBPS_CLERK
+            elif "ibps_po" in stem:
+                exam = ExamType.IBPS_PO
+            elif "rrb_ntpc" in stem:
+                exam = ExamType.RRB_NTPC
+            elif "rrb_group_d" in stem:
+                exam = ExamType.RRB_GROUP_D
+            else:
+                exam = ExamType.SSC_CGL
+
+            bp_file = blueprints_dir / f"{exam.value}_blueprint.json"
             if not bp_file.exists():
                 logger.info("Blueprint missing for %s. Analyzing sample %s...", exam.value, sample_file.name)
                 try:
@@ -98,39 +114,62 @@ def run_cron_job():
                         questions=questions,
                     )
                     bp = PatternAnalyzer.analyze_paper(paper)
-                    PatternAnalyzer.save_blueprint(bp, REPO_ROOT / "data" / "blueprints")
-                    logger.info("Saved blueprint for %s with %d topic distributions.", exam.value, len(bp.topic_distribution))
+                    bp_file.write_text(bp.model_dump_json(indent=2), encoding="utf-8")
+                    logger.info("Saved blueprint for %s with %d topic weightages.", exam.value, len(bp.topic_weightages))
                 except Exception as exc:
                     logger.warning("Could not derive blueprint from %s: %s", sample_file.name, exc)
 
-    # Step 2: Generate Original, Verified Mock Papers for each Exam
+    # Step 2: Determine target exams to process
     target_exams = [
         (ExamType.SSC_CGL, 25),
         (ExamType.SSC_CHSL, 25),
         (ExamType.IBPS_PO, 35),
+        (ExamType.SBI_PO, 35),
         (ExamType.SBI_CLERK, 35),
         (ExamType.RRB_NTPC, 30),
     ]
+
+    exam_filter = os.environ.get("EXAM_FILTER", "all").strip().lower()
+    if exam_filter != "all":
+        target_exams = [
+            item for item in target_exams
+            if item[0].value == exam_filter or exam_filter in item[0].value
+        ]
 
     use_gemini = bool(os.environ.get("GEMINI_API_KEY"))
     logger.info("Gemini LLM API: %s", "ENABLED (Key detected)" if use_gemini else "OFFLINE TEMPLATES (No key provided)")
 
     all_papers: list[Paper] = []
+    global_dedupe = DedupeEngine()
 
     for exam, target_count in target_exams:
         logger.info("--- Processing Exam: %s (Target: %d questions) ---", exam.value.upper(), target_count)
         seed = int(time.time()) % 100000 + target_count
-        paper = MockBuilder.generate_mock_paper(
-            exam=exam,
-            question_count=target_count,
+
+        bp_file = blueprints_dir / f"{exam.value}_blueprint.json"
+        if bp_file.exists():
+            try:
+                bp = Blueprint.model_validate_json(bp_file.read_text(encoding="utf-8"))
+            except Exception:
+                bp = PatternAnalyzer.analyze_questions(questions=[], exam=exam)
+        else:
+            bp = PatternAnalyzer.analyze_questions(questions=[], exam=exam)
+
+        bp.total_questions = target_count
+
+        builder = MockBuilder(seed=seed, dedupe_engine=global_dedupe)
+        paper = builder.build_mock_paper(
+            blueprint=bp,
             title=f"{exam.value.upper()} Daily Speed Mock (Batch {datetime.datetime.now().strftime('%Y%m%d')})",
-            seed=seed,
-            reword_with_llm=use_gemini,
-            blueprint_dir=REPO_ROOT / "data" / "blueprints",
+            enable_llm_rewording=use_gemini,
         )
 
         # Step 3: SymPy Math Proofing & Machine Verification
         verified_in_paper = 0
+        deduped_questions = []
+        dupe_count = 0
+        seen_in_paper = set()
+
         for q in paper.questions:
             q = QuestionClassifier.classify_question(q)
             is_ok, solver_details = MathSolver.verify_question(q)
@@ -139,12 +178,18 @@ def run_cron_job():
             if is_ok:
                 verified_in_paper += 1
 
-        # Step 4: Deduplication Check
-        deduped_questions, dupe_count = DedupeEngine.deduplicate_batch(paper.questions)
-        paper.questions = deduped_questions
+            h = q.calculate_dedupe_hash()
+            if h in seen_in_paper:
+                dupe_count += 1
+            else:
+                seen_in_paper.add(h)
+                deduped_questions.append(q)
 
-        # Save to data/generated
-        gen_path = REPO_ROOT / "data" / "generated" / f"{paper.id}.json"
+        paper.questions = deduped_questions
+        paper.total_questions = len(deduped_questions)
+
+        # Save paper to data/generated
+        gen_path = generated_dir / f"{paper.id}.json"
         gen_path.write_text(paper.model_dump_json(indent=2), encoding="utf-8")
 
         all_papers.append(paper)
@@ -159,7 +204,7 @@ def run_cron_job():
         })
         logger.info("Generated %d questions (%d verified, %d duplicates purged)", len(paper.questions), verified_in_paper, dupe_count)
 
-    # Step 5: Build Content Pack for Each Exam
+    # Step 4: Build Content Pack for Each Exam
     for exam, _ in target_exams:
         exam_papers = [p for p in all_papers if p.exam == exam]
         if not exam_papers:
@@ -173,7 +218,7 @@ def run_cron_job():
                     q.review_status = ReviewStatus.APPROVED
                 exam_questions.append(q)
 
-        version_str = datetime.datetime.now().strftime("1.%Y%m%d.%H%M")
+        version_str = datetime.datetime.now(datetime.timezone.utc).strftime("1.%Y%m%d.%H%M")
         pack, stats = ContentPackBuilder.build_pack(
             pack_id=f"pack_{exam.value}",
             version=version_str,
@@ -185,11 +230,15 @@ def run_cron_job():
         )
 
         exporter = SupabaseExporter()
-        export_file = exporter.export_pack_to_file(pack, REPO_ROOT / "exports")
+        export_file = exporter.export_pack_to_file(pack, exports_dir)
         summary["total_exported"] += pack.question_count
 
+        if os.environ.get("SUPABASE_URL") and os.environ.get("SUPABASE_SERVICE_ROLE_KEY"):
+            push_res = exporter.push_to_supabase(pack)
+            logger.info("Supabase push result for %s: %s", exam.value, push_res.get("status"))
+
         logger.info("Exported Pack for %s: %s (Questions: %d, SHA-256: %s)", exam.value, export_file.name, pack.question_count, pack.checksum_sha256[:12])
-        logger.info("  Copyright Legal Gate: %d PYQ questions blocked, %d unverified blocked.", stats["blocked_pyq_copyright"], stats["blocked_unverified"])
+        logger.info("  Copyright Legal Gate: %d PYQ questions blocked, %d unverified blocked.", stats.get("blocked_pyq_copyright", 0), stats.get("blocked_unverified", 0))
 
     duration = round(time.time() - start_time, 2)
     summary["duration_seconds"] = duration
@@ -199,7 +248,7 @@ def run_cron_job():
     logger.info("=================================================================")
 
     # Write execution log summary
-    summary_path = REPO_ROOT / "logs" / "last_cron_run.json"
+    summary_path = logs_dir / "last_cron_run.json"
     summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     return summary
 
