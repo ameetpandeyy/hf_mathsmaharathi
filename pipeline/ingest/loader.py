@@ -12,7 +12,10 @@ logger = logging.getLogger(__name__)
 
 # Optional library detection
 try:
-    import fitz  # PyMuPDF
+    try:
+        import pymupdf as fitz  # Modern PyMuPDF API
+    except ImportError:
+        import fitz
     HAS_PYMUPDF = True
 except ImportError:
     HAS_PYMUPDF = False
